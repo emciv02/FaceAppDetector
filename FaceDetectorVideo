@@ -1,0 +1,36 @@
+# Instalar OpenCv, ir no CMD e digitar:
+# pip install python-opencv
+
+import cv2 # Importa a biblioteca do OpenCv
+
+# Carrega akgumas faces frontais já carregadas do OpenCv, do arquivo
+trained_face_data = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+
+# Captura video da webcam
+webcam= cv2.VideoCapture(0)  # ou 0 para webcam
+
+# Faz  a iteração dos frames o tempo todo
+while True:
+			# Lê o frame atual
+			succesful_frame_read, frame = webcam.read()			
+			
+			# Coloca em preto e branco
+			grayscaled_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+		
+			# Coordenadas ao redor do retângulo da face detectada
+			face_coordinates =  trained_face_data.detectMultiScale(grayscaled_img)
+			
+			# Desenha retângulos, como é uma lista de faces, é possível fazer um loop
+			# para identificar todas as faces em cada frame
+			for (x,y,w,h) in face_coordinates:
+					cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
+
+			cv2.imshow('Face detector', frame) 
+			key = cv2.waitKey(1)
+				
+			# Se a tecla Q for pressionada sairá do looping infinito
+			if key == 81 or key == 113:
+				 break
+
+webcam.release()
+			
